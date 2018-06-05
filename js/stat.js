@@ -45,7 +45,7 @@ function getMaxElement(arr) {
   return maxElement;
 }
 
-function renderStatistics(ctx, names, times) {
+window.renderStatistics = function (ctx, names, times) {
   renderCloud(ctx, CLOUD_START + 10, 20, 'rgba(0, 0, 0, 0.7)', CLOUD_WIDTH, CLOUD_HEIGHT);
   renderCloud(ctx, CLOUD_START, 10, 'white', CLOUD_WIDTH, CLOUD_HEIGHT);
   ctx.font = 'PT Mono 16px';
@@ -63,4 +63,4 @@ function renderStatistics(ctx, names, times) {
       renderColumn(ctx, startX + i * (COLUMN_WIDTH + SPACE_WIDTH), 120 + columnHeight - calculatedHeight, getRandomBlue(), COLUMN_WIDTH, calculatedHeight, names[i], times[i]);
     }
   }
-}
+};
