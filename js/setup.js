@@ -45,6 +45,10 @@ function createDOMWizard(wizard) {
   return wizardElement;
 }
 
+function addWizardsToPage(fragment) {
+  similarListElement.appendChild(fragment);
+}
+
 function createDOMWizardsList(wizardsArray) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < wizardsArray.length; i++) {
@@ -57,5 +61,5 @@ var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
 
 var wizardsList = createDOMWizardsList(getWizards());
-similarListElement.appendChild(wizardsList);
+addWizardsToPage(wizardsList);
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
