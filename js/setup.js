@@ -21,11 +21,20 @@ function getRandomArrayElement(array) {
 }
 
 function createWizard(firstNames, secondNames, coatColors, eyesColors) {
-  var wizard = {};
-  wizard.name = getRandomArrayElement(firstNames) + ' ' + getRandomArrayElement(secondNames);
-  wizard.coatColor = getRandomArrayElement(coatColors);
-  wizard.eyesColor = getRandomArrayElement(eyesColors);
+  var wizard = {
+    name: getRandomArrayElement(firstNames) + ' ' + getRandomArrayElement(secondNames),
+    coatColor: getRandomArrayElement(coatColors),
+    eyesColor: getRandomArrayElement(eyesColors)
+  };
   return wizard;
+}
+
+function getWizards() {
+  var wizards = [];
+  for (var i = 0; i < POPULATION; i++) {
+    wizards[i] = createWizard(FIRST_NAMES, SECOND_NAMES, COAT_COLORS, EYES_COLOR);
+  }
+  return wizards;
 }
 
 function createDOMWizard(wizard) {
@@ -36,21 +45,17 @@ function createDOMWizard(wizard) {
   return wizardElement;
 }
 
-function createDOMWizardsList(wizardsArray, parent) {
+function createDOMWizardsList(wizardsArray) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < wizardsArray.length; i++) {
     fragment.appendChild(createDOMWizard(wizardsArray[i]));
   }
-  parent.appendChild(fragment);
+  return fragment;
 }
 
 var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
 
-var wizards = [];
-for (var i = 0; i < POPULATION; i++) {
-  wizards[i] = createWizard(FIRST_NAMES, SECOND_NAMES, COAT_COLORS, EYES_COLOR);
-}
-
-createDOMWizardsList(wizards, similarListElement);
+var wizardsList = createDOMWizardsList(getWizards());
+similarListElement.appendChild(wizardsList);
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
