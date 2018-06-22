@@ -57,9 +57,98 @@ function createDOMWizardsList(wizardsArray) {
   return fragment;
 }
 
-var userDialog = document.querySelector('.setup');
-userDialog.classList.remove('hidden');
+
 
 var wizardsList = createDOMWizardsList(getWizards());
 addWizardsToPage(wizardsList);
-userDialog.querySelector('.setup-similar').classList.remove('hidden');
+
+
+/* module4-task1 */
+var COAT_COLORS = [
+  'rgb(101, 137, 164)',
+  'rgb(241, 43, 107)',
+  'rgb(146, 100, 161)',
+  'rgb(56, 159, 117)',
+  'rgb(215, 210, 55)',
+  'rgb(0, 0, 0)'
+];
+var EYE_COLORS = [
+  'black',
+  'red',
+  'blue',
+  'yellow',
+  'green'
+];
+var FIREBALL_COLORS = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+var setupBlock = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = document.querySelector('.setup-close');
+var setupSimilar = setupBlock.querySelector('.setup-similar');
+var userIcon = document.querySelector('.setup-open-icon');
+var userNameInput = document.querySelector('.setup-user-name');
+
+function openSetup() {
+  setupBlock.classList.remove('hidden');
+  setupSimilar.classList.remove('hidden');
+  document.addEventListener('keydown', onKeyEscPressHandler);
+  document.addEventListener('keydown', onSetupClosePressHandler);
+}
+
+function closeSetup() {
+  setupBlock.classList.add('hidden');
+  setupSimilar.classList.add('hidden');
+  document.removeEventListener('keydown', onKeyEscPressHandler);
+}
+
+function isIconInFocus() {
+  return (userIcon === document.activeElement);
+}
+
+function isCloseBtnInFocus() {
+  return (setupClose === document.activeElement);
+}
+
+function isInputNameInFocus() {
+  return (userNameInput === document.activeElement);
+}
+
+function isSetupOpened() {
+  return (!setupBlock.classList.contains('hidden'));
+}
+
+function onKeyEnterPressHandler(event) {
+  if (event.keyCode === 13) {
+    openSetup();
+  }
+}
+
+function onSetupClosePressHandler(event) {
+  if (event.keyCode === 27 && isCloseBtnInFocus()) {
+    closeSetup();
+  }
+}
+
+function onKeyEscPressHandler(event) {
+  if (event.keyCode === 27 && !isInputNameInFocus()) {
+    closeSetup();
+  }
+}
+
+function onIconFocusHandler() {
+  document.addEventListener('keydown', onKeyEnterPressHandler);
+}
+
+function onIconBlurHandler() {
+  document.removeEventListener('keydown', onKeyEnterPressHandler);
+}
+
+setupOpen.addEventListener('click', openSetup);
+setupClose.addEventListener('click', closeSetup);
+userIcon.addEventListener('focus', onIconFocusHandler);
+userIcon.addEventListener('blur', onIconBlurHandler);
