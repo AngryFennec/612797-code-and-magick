@@ -27,56 +27,64 @@
     }
   }
 
-  function setHandler() {
-    setupPic.addEventListener('mousedown', function (event) {
-      event.preventDefault();
-      var startCoords = {
-        x: event.clientX,
-        y: event.clientY
+  function onSetupPickMousedown(event) {
+    event.preventDefault();
+    var startCoords = {
+      x: event.clientX,
+      y: event.clientY
+    };
+    var dragged = false;
+
+    var onMouseMove = function (moveEvent) {
+      moveEvent.preventDefault();
+      dragged = true;
+
+      var shift = {
+        x: startCoords.x - moveEvent.clientX,
+        y: startCoords.y - moveEvent.clientY
       };
-      var dragged = false;
 
-      var onMouseMove = function (moveEvent) {
-        moveEvent.preventDefault();
-        dragged = true;
+      startCoords = {
+        x: moveEvent.clientX,
+        y: moveEvent.clientY
+      };
 
-        var shift = {
-          x: startCoords.x - moveEvent.clientX,
-          y: startCoords.y - moveEvent.clientY
+      setupBlock.style.top = (setupBlock.offsetTop - shift.y) + 'px';
+      setupBlock.style.left = (setupBlock.offsetLeft - shift.x) + 'px';
+    };
+
+    var onMouseUp = function (upEvent) {
+      upEvent.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+
+      if (dragged) {
+        var onClickPreventDefault = function (evt) {
+          evt.preventDefault();
+          setupPic.removeEventListener('click', onClickPreventDefault);
         };
+        setupPic.addEventListener('click', onClickPreventDefault);
+      }
 
-        startCoords = {
-          x: moveEvent.clientX,
-          y: moveEvent.clientY
-        };
-
-        setupBlock.style.top = (setupBlock.offsetTop - shift.y) + 'px';
-        setupBlock.style.left = (setupBlock.offsetLeft - shift.x) + 'px';
-      };
-
-      var onMouseUp = function (upEvent) {
-        upEvent.preventDefault();
-
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
-
-        if (dragged) {
-          var onClickPreventDefault = function (evt) {
-            evt.preventDefault();
-            setupPic.removeEventListener('click', onClickPreventDefault);
-          };
-          setupPic.addEventListener('click', onClickPreventDefault);
-        }
-
-      };
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    });
+    };
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   }
+
+  function setHandler() {
+    setupPic.addEventListener('mousedown', onSetupPickMousedown);
+  }
+
+  function removeHandler() {
+    setupPic.removeEventListener('mousedown', onSetupPickMousedown);
+  }
+
   window.dialog = {
     getInitCoords: getInitCoords,
     setInitCoords: setInitCoords,
     setHandler: setHandler,
-    setCoords: setCoords
+    setCoords: setCoords,
+    removeHandler: removeHandler
   };
 })();

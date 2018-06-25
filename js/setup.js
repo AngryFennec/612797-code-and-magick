@@ -129,6 +129,7 @@ function closeSetup() {
   setupBlock.classList.add('hidden');
   setupSimilar.classList.add('hidden');
   document.removeEventListener('keydown', onKeyEscPressHandler);
+  window.dialog.removeHandler();
 }
 
 function isIconInFocus() {
