@@ -116,16 +116,20 @@ var wizardObject = {
 };
 
 function openSetup() {
+  window.dialog.setInitCoords(setupBlock);
+  window.dialog.setCoords(setupBlock);
   setupBlock.classList.remove('hidden');
   setupSimilar.classList.remove('hidden');
   document.addEventListener('keydown', onKeyEscPressHandler);
   setWizardHandlers();
+  window.dialog.setHandler();
 }
 
 function closeSetup() {
   setupBlock.classList.add('hidden');
   setupSimilar.classList.add('hidden');
   document.removeEventListener('keydown', onKeyEscPressHandler);
+  window.dialog.removeHandler();
 }
 
 function isIconInFocus() {
