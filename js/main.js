@@ -88,9 +88,10 @@
   function onIconBlurHandler() {
     document.removeEventListener('keydown', onKeyEnterPressHandler);
   }
+
   window.data.show();
-  window.setup.getSetupOpen().addEventListener('click', openSetup);
-  window.setup.getSetupClose().addEventListener('click', closeSetup);
-  window.setup.getUserIcon().addEventListener('focus', onIconFocusHandler);
-  window.setup.getUserIcon().addEventListener('blur', onIconBlurHandler);
+  window.setup.setOpenListener(openSetup);
+  window.setup.setCloseListener(closeSetup);
+  window.setup.setIconListener('focus', onIconFocusHandler);
+  window.setup.setIconListener('blur', onIconBlurHandler);
 })();

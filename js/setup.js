@@ -33,16 +33,16 @@
     return setupBlock;
   }
 
-  function getSetupOpen() {
-    return setupOpen;
+  function setOpenListener(callback) {
+    setupOpen.addEventListener('click', callback);
   }
 
-  function getSetupClose() {
-    return setupClose;
+  function setCloseListener(callback) {
+    setupClose.addEventListener('click', callback);
   }
 
-  function getUserIcon() {
-    return userIcon;
+  function setIconListener(evt, callback) {
+    userIcon.addEventListener(evt, callback);
   }
 
   window.setup = {
@@ -52,9 +52,9 @@
     isInputNameInFocus: isInputNameInFocus,
     isSetupOpened: isSetupOpened,
     getSetupBlock: getSetupBlock,
-    getSetupOpen: getSetupOpen,
-    getSetupClose: getSetupClose,
-    getUserIcon: getUserIcon
+    setOpenListener: setOpenListener,
+    setCloseListener: setCloseListener,
+    setIconListener: setIconListener
   };
 
 })();
