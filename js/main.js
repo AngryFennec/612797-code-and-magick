@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var setupPic = document.querySelector('.upload');
+  var setupForm = document.querySelector('.setup-wizard-form');
   function onSetupPickMousedown(event) {
     event.preventDefault();
     var startCoords = {
@@ -55,18 +56,30 @@
   }
 
   function openSetup() {
+    window.backend.load(window.data.show, window.modal.show);
     window.dialog.setInitCoords(window.setup.getSetupBlock());
     window.dialog.setCoords(window.setup.getSetupBlock());
     window.setup.show();
     document.addEventListener('keydown', onKeyEscPressHandler);
     window.data.setWizardHandlers();
     setHandler(setupPic);
+    window.setup.setSumbitListener(onSubmitBtnClickHandler);
+
   }
 
   function closeSetup() {
     window.setup.hide();
     document.removeEventListener('keydown', onKeyEscPressHandler);
     removeHandler(setupPic);
+    window.data.remove();
+  }
+
+  function onSubmitBtnClickHandler(event) {
+    window.backend.send(new FormData(setupForm), function () {
+      closeSetup();
+      window.modal.show('Загрузка прошла успешно');
+    }, window.modal.show);
+    event.preventDefault();
   }
 
   function onKeyEnterPressHandler(event) {
@@ -89,7 +102,6 @@
     document.removeEventListener('keydown', onKeyEnterPressHandler);
   }
 
-  window.data.show();
   window.setup.setOpenListener(openSetup);
   window.setup.setCloseListener(closeSetup);
   window.setup.setIconListener('focus', onIconFocusHandler);

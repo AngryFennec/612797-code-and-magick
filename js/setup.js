@@ -6,6 +6,7 @@
   var setupSimilar = setupBlock.querySelector('.setup-similar');
   var userIcon = document.querySelector('.setup-open-icon');
   var userNameInput = document.querySelector('.setup-user-name');
+  var setupSubmit = setupBlock.querySelector('.setup-submit');
 
   function showSetup() {
     setupBlock.classList.remove('hidden');
@@ -45,6 +46,10 @@
     userIcon.addEventListener(evt, callback);
   }
 
+  function setSumbitListener(callback) {
+    setupSubmit.addEventListener('click', callback);
+  }
+
   window.setup = {
     show: showSetup,
     hide: hideSetup,
@@ -54,7 +59,8 @@
     getSetupBlock: getSetupBlock,
     setOpenListener: setOpenListener,
     setCloseListener: setCloseListener,
-    setIconListener: setIconListener
+    setIconListener: setIconListener,
+    setSumbitListener: setSumbitListener
   };
 
 })();
