@@ -24,9 +24,10 @@
   ];
 
   var similarListElement = document.querySelector('.setup-similar-list');
-  var similarWizardTemplate = document.querySelector('#similar-wizard-template')
-      .content
-      .querySelector('.setup-similar-item');
+  var similarWizardTemplate = document.querySelector('#similar-wizard-template').content.querySelector('.setup-similar-item');
+  var coatColor;
+  var eyesColor;
+  var wizards = [];
 
   var wizardObject = {
     coat: document.querySelector('.setup-wizard .wizard-coat'),
@@ -49,12 +50,13 @@
   function createDOMWizard(wizard) {
     var wizardElement = similarWizardTemplate.cloneNode(true);
     wizardElement.querySelector('.setup-similar-label').textContent = wizard.name;
-    wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
-    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
+    wizardElement.querySelector('.wizard-coat').style.fill = wizard.colorCoat;
+    wizardElement.querySelector('.wizard-eyes').style.fill = wizard.colorEyes;
     return wizardElement;
   }
 
   function addWizardsToPage(fragment) {
+    removeWizardsFromPage();
     similarListElement.appendChild(fragment);
   }
 
@@ -70,23 +72,88 @@
     return fragment;
   }
 
-  function showWizards(wizards) {
+  function showWizards(wizardsArray) {
+    wizards = wizardsArray;
     var wizardsList = createDOMWizardsList(wizards.slice(0, 4));
     addWizardsToPage(wizardsList);
   }
 
+  function getRank(wizard) {
+    var rank = 0;
 
-  function setWizardHandlers() {
-    wizardObject.coat.addEventListener('click', function () {
-      var coatColor = getRandomArrayElement(COAT_COLORS);
-      wizardObject.coat.style.fill = coatColor;
-      wizardObject.coatInput.value = coatColor;
+    if (wizard.colorCoat === coatColor) {
+      rank += 2;
+    }
+    if (wizard.colorEyes === eyesColor) {
+      rank += 1;
+    }
+
+    return rank;
+  }
+
+  function namesComparator(left, right) {
+    if (left > right) {
+      return 1;
+    } else if (left < right) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+
+  function updateWizards() {
+    var sameCoatAndEyesWizards = wizards.filter(function (it) {
+      return it.colorCoat === coatColor &&
+        it.colorEyes === eyesColor;
     });
-    wizardObject.eyes.addEventListener('click', function () {
-      var eyesColor = getRandomArrayElement(EYES_COLORS);
-      wizardObject.eyes.style.fill = eyesColor;
-      wizardObject.eyesInput.value = eyesColor;
+
+    var sameCoatWizards = wizards.filter(function (it) {
+      return it.colorCoat === coatColor;
     });
+    var sameEyesWizards = wizards.filter(function (it) {
+      return it.colorEyes === eyesColor;
+    });
+
+    var filteredWizards = sameCoatAndEyesWizards;
+    filteredWizards = filteredWizards.concat(sameCoatWizards);
+    filteredWizards = filteredWizards.concat(sameEyesWizards);
+    filteredWizards = filteredWizards.concat(wizards);
+
+    var uniqueWizards = filteredWizards.filter(function (it, i) {
+      return filteredWizards.indexOf(it) === i;
+    });
+
+
+    showWizards(uniqueWizards.slice().
+          sort(function (left, right) {
+            var rankDiff = getRank(right) - getRank(left);
+            if (rankDiff === 0) {
+              namesComparator(left.name, right.name);
+            }
+            return rankDiff;
+          }));
+  }
+
+  function changeCoatColor() {
+    var newCoatColor = getRandomArrayElement(COAT_COLORS);
+    coatColor = newCoatColor;
+    wizardObject.coat.style.fill = coatColor;
+    wizardObject.coatInput.value = coatColor;
+    updateWizards();
+  }
+
+  function changeEyesColor() {
+    var newEyesColor = getRandomArrayElement(EYES_COLORS);
+    eyesColor = newEyesColor;
+    wizardObject.eyes.style.fill = eyesColor;
+    wizardObject.eyesInput.value = eyesColor;
+    updateWizards();
+  }
+
+
+  function setWizardHandlers(callback) {
+    wizardObject.coat.addEventListener('click', callback(changeCoatColor));
+    wizardObject.eyes.addEventListener('click', callback(changeEyesColor));
     wizardObject.fireball.addEventListener('click', function () {
       var fireballColor = getRandomArrayElement(FIREBALL_COLORS);
       wizardObject.fireball.style.background = fireballColor;
@@ -99,4 +166,6 @@
     setWizardHandlers: setWizardHandlers,
     remove: removeWizardsFromPage
   };
+
+
 })();

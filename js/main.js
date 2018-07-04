@@ -61,7 +61,7 @@
     window.dialog.setCoords(window.setup.getSetupBlock());
     window.setup.show();
     document.addEventListener('keydown', onKeyEscPressHandler);
-    window.data.setWizardHandlers();
+    window.data.setWizardHandlers(window.debounce.thisFunction);
     setHandler(setupPic);
     window.setup.setSumbitListener(onSubmitBtnClickHandler);
 
