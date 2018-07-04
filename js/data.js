@@ -74,6 +74,8 @@
 
   function showWizards(wizardsArray) {
     wizards = wizardsArray;
+    coatColor = wizardObject.coatInput.value;
+    eyesColor = wizardObject.eyesInput.value;
     var wizardsList = createDOMWizardsList(wizards.slice(0, 4));
     addWizardsToPage(wizardsList);
   }
