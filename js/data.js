@@ -28,7 +28,6 @@
   var coatColor;
   var eyesColor;
   var wizards = [];
-  var callbackDebounce = null;
 
   var wizardObject = {
     coat: document.querySelector('.setup-wizard .wizard-coat'),
@@ -104,37 +103,14 @@
     }
   }
 
-  function updateWizards() {
-    var sameCoatAndEyesWizards = wizards.filter(function (it) {
-      return it.colorCoat === coatColor &&
-        it.colorEyes === eyesColor;
-    });
+  var updateWizards;
 
-    var sameCoatWizards = wizards.filter(function (it) {
-      return it.colorCoat === coatColor;
-    });
-    var sameEyesWizards = wizards.filter(function (it) {
-      return it.colorEyes === eyesColor;
-    });
-
-    var filteredWizards = sameCoatAndEyesWizards;
-    filteredWizards = filteredWizards.concat(sameCoatWizards);
-    filteredWizards = filteredWizards.concat(sameEyesWizards);
-    filteredWizards = filteredWizards.concat(wizards);
-
-    var uniqueWizards = filteredWizards.filter(function (it, i) {
-      return filteredWizards.indexOf(it) === i;
-    });
-
-
-    showWizards(uniqueWizards.slice().
-          sort(function (left, right) {
-            var rankDiff = getRank(right) - getRank(left);
-            if (rankDiff === 0) {
-              namesComparator(left.name, right.name);
-            }
-            return rankDiff;
-          }));
+  function changeCoatColor() {
+    var newCoatColor = getRandomArrayElement(COAT_COLORS);
+    coatColor = newCoatColor;
+    wizardObject.coat.style.fill = coatColor;
+    wizardObject.coatInput.value = coatColor;
+    updateWizards();
   }
 
   function changeEyesColor() {
@@ -146,17 +122,12 @@
   }
 
 
-  function setWizardHandlers(callback) {
-    callbackDebounce = callback;
+  function setWizardHandlers() {
     wizardObject.coat.addEventListener('click', function () {
-      var newCoatColor = getRandomArrayElement(COAT_COLORS);
-      coatColor = newCoatColor;
-      wizardObject.coat.style.fill = coatColor;
-      wizardObject.coatInput.value = coatColor;
-      callbackDebounce(updateWizards());
+      changeCoatColor();
     });
     wizardObject.eyes.addEventListener('click', function () {
-      callbackDebounce(changeEyesColor());
+      changeEyesColor();
     });
     wizardObject.fireball.addEventListener('click', function () {
       var fireballColor = getRandomArrayElement(FIREBALL_COLORS);
@@ -165,10 +136,46 @@
     });
   }
 
+  function setDebounce(callback) {
+    updateWizards = callback(function () {
+      var sameCoatAndEyesWizards = wizards.filter(function (it) {
+        return it.colorCoat === coatColor &&
+          it.colorEyes === eyesColor;
+      });
+
+      var sameCoatWizards = wizards.filter(function (it) {
+        return it.colorCoat === coatColor;
+      });
+      var sameEyesWizards = wizards.filter(function (it) {
+        return it.colorEyes === eyesColor;
+      });
+
+      var filteredWizards = sameCoatAndEyesWizards;
+      filteredWizards = filteredWizards.concat(sameCoatWizards);
+      filteredWizards = filteredWizards.concat(sameEyesWizards);
+      filteredWizards = filteredWizards.concat(wizards);
+
+      var uniqueWizards = filteredWizards.filter(function (it, i) {
+        return filteredWizards.indexOf(it) === i;
+      });
+
+
+      showWizards(uniqueWizards.slice().
+            sort(function (left, right) {
+              var rankDiff = getRank(right) - getRank(left);
+              if (rankDiff === 0) {
+                namesComparator(left.name, right.name);
+              }
+              return rankDiff;
+            }));
+    });
+  }
+
   window.data = {
     show: showWizards,
     setWizardHandlers: setWizardHandlers,
-    remove: removeWizardsFromPage
+    remove: removeWizardsFromPage,
+    setDebounce: setDebounce
   };
 
 

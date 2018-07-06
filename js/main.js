@@ -61,7 +61,7 @@
     window.dialog.setCoords(window.setup.getSetupBlock());
     window.setup.show();
     document.addEventListener('keydown', onKeyEscPressHandler);
-    window.data.setWizardHandlers(window.debounce.thisFunction);
+    window.data.setWizardHandlers();
     setHandler(setupPic);
     window.setup.setSumbitListener(onSubmitBtnClickHandler);
 
@@ -102,6 +102,7 @@
     document.removeEventListener('keydown', onKeyEnterPressHandler);
   }
 
+  window.data.setDebounce(window.debounce.thisFunction);
   window.setup.setOpenListener(openSetup);
   window.setup.setCloseListener(closeSetup);
   window.setup.setIconListener('focus', onIconFocusHandler);
