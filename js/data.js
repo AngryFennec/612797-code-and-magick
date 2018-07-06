@@ -28,6 +28,7 @@
   var coatColor;
   var eyesColor;
   var wizards = [];
+  var callbackDebounce = null;
 
   var wizardObject = {
     coat: document.querySelector('.setup-wizard .wizard-coat'),
@@ -134,14 +135,6 @@
           }));
   }
 
-  function changeCoatColor() {
-    var newCoatColor = getRandomArrayElement(COAT_COLORS);
-    coatColor = newCoatColor;
-    wizardObject.coat.style.fill = coatColor;
-    wizardObject.coatInput.value = coatColor;
-    updateWizards();
-  }
-
   function changeEyesColor() {
     var newEyesColor = getRandomArrayElement(EYES_COLORS);
     eyesColor = newEyesColor;
@@ -152,8 +145,17 @@
 
 
   function setWizardHandlers(callback) {
-    wizardObject.coat.addEventListener('click', callback(changeCoatColor));
-    wizardObject.eyes.addEventListener('click', callback(changeEyesColor));
+    callbackDebounce = callback;
+    wizardObject.coat.addEventListener('click', function () {
+      var newCoatColor = getRandomArrayElement(COAT_COLORS);
+      coatColor = newCoatColor;
+      wizardObject.coat.style.fill = coatColor;
+      wizardObject.coatInput.value = coatColor;
+      callbackDebounce(updateWizards());
+    });
+    wizardObject.eyes.addEventListener('click', function () {
+      callbackDebounce(changeEyesColor());
+    });
     wizardObject.fireball.addEventListener('click', function () {
       var fireballColor = getRandomArrayElement(FIREBALL_COLORS);
       wizardObject.fireball.style.background = fireballColor;
