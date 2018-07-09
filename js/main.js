@@ -102,7 +102,7 @@
     document.removeEventListener('keydown', onKeyEnterPressHandler);
   }
 
-  window.data.setDebounce(window.debounce.thisFunction);
+  window.data.setDebounce(window.debounce);
   window.setup.setOpenListener(openSetup);
   window.setup.setCloseListener(closeSetup);
   window.setup.setIconListener('focus', onIconFocusHandler);
