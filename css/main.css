@@ -998,13 +998,12 @@ input[type=radio]:checked + .review-mark-label
 
 .upload .setup-user-pic
 {
-    position: absolute;
-    top: 0;
-    left: 0;
+  display: block;
+  margin: 0;
 
-    display: block;
-
-    margin: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .upload input
@@ -1018,4 +1017,6 @@ input[type=radio]:checked + .review-mark-label
     height: 100%;
 
     opacity: 0;
+    left: 0;
+    top: 0;
 }
